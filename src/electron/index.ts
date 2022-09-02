@@ -36,7 +36,7 @@ export function createElectronApp({ update, protocol }: CreateAppOptions) {
   else {
     if (protocol) {
       app.on('second-instance', (_event, argv) => {
-        const url = argv.find(arg => arg.startsWith(protocol.path))
+        const url = argv.find(arg => arg.startsWith(protocol.scheme))
         if (!url) return
         process.platform !== 'darwin' && protocol.handle(url)
       })
