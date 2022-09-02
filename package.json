@@ -1,0 +1,58 @@
+{
+  "name": "@attq/blackboox",
+  "version": "0.0.1",
+  "description": "",
+  "repository": "amaury-tobias/blackboox",
+  "license": "MIT",
+  "packageManager": "pnpm@7.9.5",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "blackboox": "./bin/blackboox.mjs"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "src/electron",
+    "src/app"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "build": "unbuild"
+  },
+  "devDependencies": {
+    "unbuild": "^0.8.10"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^3.0.3",
+    "colorette": "^2.0.19",
+    "defu": "^6.1.0",
+    "electron": "^20.1.1",
+    "electron-builder": "^23.3.3",
+    "mri": "^1.2.0",
+    "unconfig": "^0.3.5",
+    "unimport": "^0.6.7",
+    "unocss": "^0.45.14",
+    "unplugin": "^0.9.5",
+    "unplugin-vue-components": "^0.22.4",
+    "vite": "^3.0.9"
+  },
+  "peerDependencies": {
+    "@vueuse/core": "^9.1.1",
+    "electron-builder": "^23.3.3",
+    "electron-updater": "^5.2.1",
+    "vue": "^3.2.25"
+  }
+}
