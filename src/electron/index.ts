@@ -29,36 +29,40 @@ export function createElectronApp({ update, protocol }: CreateAppOptions) {
     }
   )
 
+  protocol?.scheme && app.setAsDefaultProtocolClient(protocol.scheme, protocol.path, protocol.args)
+
   const gotTheLock = app.requestSingleInstanceLock()
-  !gotTheLock && app.quit()
-
-  if (protocol) {
-    app.on('second-instance', (_event, argv) => {
-      process.platform !== 'darwin' && protocol.handle(argv.slice(3).toString())
-    })
-    app.on('open-url', (event, url) => {
-      event.preventDefault()
-      protocol.handle(url)
-    })
-    app.setAsDefaultProtocolClient(protocol.scheme, protocol.path, protocol.args)
-  }
-
-  if (update) {
-    app.whenReady().then(() => {
-      // @ts-expect-error
-      import('electron-updater').then(({ autoUpdater }) => {
-        autoUpdater.autoDownload = update.auto_download
-        autoUpdater.on('update-available', async (...args: any[]) => {
-          const canDownloadUpdate = await update.onUpdateAvailable(args)
-          canDownloadUpdate && autoUpdater.downloadUpdate()
-        })
-        autoUpdater.on('update-downloaded', async (...args: any[]) => {
-          const canInstallUpdate = await update.onUpdateDownloaded(args)
-          canInstallUpdate && setImmediate(() => autoUpdater.quitAndInstall())
-        })
-        autoUpdater.on('error', update.onUpdateError)
+  if (!gotTheLock) app.quit()
+  else {
+    if (protocol) {
+      app.on('second-instance', (_event, argv) => {
+        const url = argv.find(arg => arg.startsWith(protocol.path))
+        if (!url) return
+        process.platform !== 'darwin' && protocol.handle(url)
       })
-    })
+      app.on('open-url', (event, url) => {
+        event.preventDefault()
+        protocol.handle(url)
+      })
+    }
+
+    if (update) {
+      app.whenReady().then(() => {
+        // @ts-expect-error
+        import('electron-updater').then(({ autoUpdater }) => {
+          autoUpdater.autoDownload = update.auto_download
+          autoUpdater.on('update-available', async (...args: any[]) => {
+            const canDownloadUpdate = await update.onUpdateAvailable(args)
+            canDownloadUpdate && autoUpdater.downloadUpdate()
+          })
+          autoUpdater.on('update-downloaded', async (...args: any[]) => {
+            const canInstallUpdate = await update.onUpdateDownloaded(args)
+            canInstallUpdate && setImmediate(() => autoUpdater.quitAndInstall())
+          })
+          autoUpdater.on('error', update.onUpdateError)
+        })
+      })
+    }
   }
 
   return {
