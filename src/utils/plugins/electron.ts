@@ -1,4 +1,5 @@
 import { EOL } from 'node:os'
+import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { promises as fsp } from 'node:fs'
 import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
@@ -82,7 +83,10 @@ export const startElectronPlugin = createUnplugin<Blackboox>((options = {}) => {
         electronProcess.kill()
         electronProcess = null
       }
-      electronProcess = spawn('electron', [
+      const require = createRequire(import.meta.url)
+      const electron = require('electron')
+
+      electronProcess = spawn(String(electron), [
         '--inspect=5858',
         '--remote-debugging-port=9222',
         '--dev',
