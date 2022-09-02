@@ -1,6 +1,6 @@
 {
   "name": "@attq/blackboox",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "repository": {
     "type": "git",
@@ -33,7 +33,8 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "unbuild"
+    "build": "unbuild",
+    "prepublish": "pnpm build"
   },
   "devDependencies": {
     "unbuild": "^0.8.10"
