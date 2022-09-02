@@ -2,7 +2,10 @@
   "name": "@attq/blackboox",
   "version": "0.0.1",
   "description": "",
-  "repository": "amaury-tobias/blackboox",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amaury-tobias/blackboox.git"
+  },
   "license": "MIT",
   "packageManager": "pnpm@7.9.5",
   "sideEffects": false,
@@ -54,5 +57,10 @@
     "electron-builder": "^23.3.3",
     "electron-updater": "^5.2.1",
     "vue": "^3.2.25"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/amaury-tobias/blackboox/issues"
+  },
+  "homepage": "https://github.com/amaury-tobias/blackboox#readme",
+  "author": "Amaury Tobias"
 }
