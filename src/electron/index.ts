@@ -17,7 +17,7 @@ type CreateAppOptions = {
   }
 }
 
-export function createElectronApp({ update, protocol }: CreateAppOptions) {
+export function createElectronApp({ update, protocol }: CreateAppOptions = {}) {
   global.__windowUrls = new Proxy(
     {},
     {
@@ -48,7 +48,6 @@ export function createElectronApp({ update, protocol }: CreateAppOptions) {
 
     if (update) {
       app.whenReady().then(() => {
-        // @ts-expect-error
         import('electron-updater').then(({ autoUpdater }) => {
           autoUpdater.autoDownload = update.auto_download
           autoUpdater.on('update-available', async (...args: any[]) => {
