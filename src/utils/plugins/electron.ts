@@ -83,11 +83,8 @@ export const startElectronPlugin = createUnplugin<Blackboox>((options = {}) => {
         electronProcess.kill()
         electronProcess = null
       }
-      const require = createRequire(import.meta.url)
-      const electron = require('electron')
 
-      // @ts-expect-error
-      electronProcess = spawn(electron, [resolve(options.rootDir!, '.')])
+      electronProcess = spawn('electron', [resolve(options.rootDir!, '.')])
       if (!electronProcess) return
 
       electronProcess.stdout.on('data', electronLogger)
