@@ -1,4 +1,5 @@
 import type { CliOptions } from 'electron-builder'
+import type { PluginOption } from 'vite'
 
 export type Blackboox = {
   srcDir?: string
@@ -6,7 +7,15 @@ export type Blackboox = {
   buildDir?: string
 
   external?: string[]
-  electron?: CliOptions
+
+  electron?: {
+    builder?: CliOptions
+    plugins?: PluginOption[]
+  }
+
+  client?: {
+    plugins?: PluginOption[]
+  }
 }
 
 interface ConfigEnv {

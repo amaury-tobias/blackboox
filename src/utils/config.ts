@@ -6,7 +6,6 @@ import { loadConfig } from 'unconfig'
 import { defineConfig } from 'vite'
 
 import Vue from '@vitejs/plugin-vue'
-import Unocss from 'unocss/vite'
 
 import { electronMainPlugin, servicesElectronPlugin, startElectronPlugin } from './plugins/electron'
 import { autoImportClientPlugin, componentsPlugin, servicesClientPlugin } from './plugins/client'
@@ -52,12 +51,10 @@ export function loadRendererConfig(blackboox: Blackboox) {
     optimizeDeps: { exclude: ['electron'] },
     plugins: [
       Vue(),
-      Unocss({
-        configFile: resolve(blackboox.rootDir!, blackboox.srcDir!, 'uno.config.ts'),
-      }),
       componentsPlugin(blackboox),
       autoImportClientPlugin.vite(blackboox),
       servicesClientPlugin.vite(blackboox),
+      ...(blackboox.client?.plugins ?? []),
     ],
     server: {
       port: 4000,
@@ -102,6 +99,7 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
     plugins: [
       electronMainPlugin.vite(blackboox),
       servicesElectronPlugin.vite(blackboox),
+      ...(blackboox.electron?.plugins ?? []),
       ...[mode === 'development' ? startElectronPlugin.vite(blackboox) : null],
     ],
   })
