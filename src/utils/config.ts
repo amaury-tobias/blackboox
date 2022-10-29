@@ -1,3 +1,4 @@
+import { builtinModules } from 'node:module'
 import { resolve } from 'node:path'
 
 import defu from 'defu'
@@ -95,7 +96,7 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
       },
       rollupOptions: {
         output: { entryFileNames: '[name].cjs' },
-        external: [...blackboox.external!, '../electron'],
+        external: [...builtinModules, ...(blackboox.external ?? []), 'electron', 'electron-updater'],
       },
     },
     plugins: [
