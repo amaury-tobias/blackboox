@@ -164,6 +164,8 @@ function useService(name) {
   return servicesProxy[name]
 }
 `
+
+      // Write Client Use Services
       const useServices = imports.map(i => `export const ${i.name} = () => useService("${i.name}");`).join('\n')
       await fsp.writeFile(
         resolve(options.buildDir!, 'dev', 'client', 'useService.mjs'),
@@ -185,7 +187,7 @@ function initializeServices(services) {
 `
 
       const initServicesObject = imports.map(i => `${i.name}: ${i.name}()`).join(',')
-      const setupServices = `export const setupServices = () => initializeServices({${initServicesObject}})`
+      const setupServices = `initializeServices({${initServicesObject}})`
 
       await fsp.writeFile(
         resolve(options.buildDir!, 'dev', 'electron', 'index.ts'),
