@@ -22,6 +22,7 @@ export default defineBlackbooxCommand({
     const viteDevServer = await createServer({
       mode: 'development',
       root: resolve(blackboox.rootDir!, blackboox.srcDir!),
+      envDir: resolve(blackboox.rootDir!, blackboox.srcDir!),
       ...viteRendererConfig,
     })
     await viteDevServer.listen()
