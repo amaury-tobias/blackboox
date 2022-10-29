@@ -78,7 +78,12 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
       },
     },
     build: {
-      watch: mode === 'development' ? {} : null,
+      watch:
+        mode === 'development'
+          ? {
+              exclude: '.blackboox/**',
+            }
+          : null,
       sourcemap: mode === 'development' ? 'inline' : false,
       minify: mode === 'development' ? false : 'esbuild',
       emptyOutDir: true,
