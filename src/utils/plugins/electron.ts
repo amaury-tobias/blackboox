@@ -1,5 +1,4 @@
 import { EOL } from 'node:os'
-import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { promises as fsp } from 'node:fs'
 import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
