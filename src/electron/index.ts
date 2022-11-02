@@ -102,3 +102,7 @@ export function createElectronWindow({ url, contentProtection }: CreateWindowOpt
 
   return window
 }
+
+export function defineService<T extends Record<string, () => Promise<unknown>>>(service: T) {
+  return () => service
+}
