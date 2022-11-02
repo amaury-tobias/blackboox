@@ -162,7 +162,7 @@ function useService(name) {
 `
 
       // Write Client Use Services
-      const useServices = imports.map(i => `export const ${i.name} = () => useService("${i.name}");`).join('\n')
+      const useServices = imports.map(i => `export const ${i.as} = () => useService("${i.as}");`).join('\n')
       await fsp.writeFile(
         resolve(options.buildDir!, 'dev', 'client', 'useService.mjs'),
         useServiceContent + '\n' + useServices,
@@ -182,7 +182,7 @@ function initializeServices(services) {
 }
 `
 
-      const initServicesObject = imports.map(i => `${i.name}: ${i.name}()`).join(',')
+      const initServicesObject = imports.map(i => `${i.as}: ${i.as}()`).join(',')
       const setupServices = `initializeServices({${initServicesObject}})`
 
       await fsp.writeFile(
