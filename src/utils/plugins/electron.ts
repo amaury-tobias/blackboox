@@ -183,7 +183,7 @@ function initializeServices(services) {
 `
 
       const initServicesObject = imports.map(i => `${i.as}: ${i.as}()`).join(',')
-      const setupServices = `initializeServices({${initServicesObject}})`
+      const setupServices = `app.whenReady().then(() => initializeServices({${initServicesObject}}))`
 
       await fsp.writeFile(
         resolve(options.buildDir!, 'dev', 'electron', 'index.ts'),
