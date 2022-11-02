@@ -1,4 +1,5 @@
 import type { CliOptions } from 'electron-builder'
+import { BuiltinPresetName, Preset } from 'unimport'
 import type { PluginOption } from 'vite'
 
 export type Blackboox = {
@@ -14,6 +15,7 @@ export type Blackboox = {
   }
 
   client?: {
+    autoImportPresets?: (Preset | Exclude<BuiltinPresetName, 'vue'>)[]
     plugins?: PluginOption[]
   }
 }
