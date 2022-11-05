@@ -45,7 +45,7 @@ export function loadRendererConfig(blackboox: Blackboox) {
     },
     build: {
       emptyOutDir: true,
-      target: 'chrome104',
+      target: 'chrome106',
       outDir: resolve(blackboox.rootDir!, blackboox.buildDir!, 'source/ui'),
     },
     optimizeDeps: { exclude: ['electron'] },
