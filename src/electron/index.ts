@@ -1,68 +1,34 @@
 import { join } from 'path'
 import { pathToFileURL } from 'url'
-import { app, BrowserWindow } from 'electron'
+import { app, ipcMain, BrowserWindow, type BrowserWindowConstructorOptions, type WebPreferences } from 'electron'
 
-type CreateAppOptions = {
-  update?: {
-    auto_download: boolean
-    onUpdateAvailable: (info: any) => Promise<boolean>
-    onUpdateDownloaded: (info: any) => Promise<boolean>
-    onUpdateError: (error: Error) => void
-  }
-  protocol?: {
-    scheme: string
-    path: string
-    args: string[]
-    handle: (url: string) => void
-  }
+// function called on runtime
+function initializeServices(services: Record<any, any>) {
+  ipcMain.handle('service:call', (_event, name, method, ...args) => {
+    const service = services[name]
+    if (!service) throw new Error('Cannot find service named' + name.toString())
+    if (!(method in service)) throw new Error('Cannot find method named ' + method + ' in service' + name.toString())
+    return service[method](...args)
+  })
+  return () => ipcMain.removeHandler('service:call')
 }
 
-export function createElectronApp({ update, protocol }: CreateAppOptions = {}) {
-  global.__windowUrls = new Proxy(
-    {},
-    {
-      get(_, page) {
-        return import.meta.env.DEV
-          ? new URL(`http://localhost:${4000}/${page.toString()}`)
-          : pathToFileURL(join(__dirname, `../ui/${page.toString()}.html`))
-      },
-    }
-  )
+global.__windowUrls = new Proxy(
+  {},
+  {
+    get(_, page) {
+      return import.meta.env.DEV
+        ? new URL(`http://localhost:${4000}/${page.toString()}`)
+        : pathToFileURL(join(__dirname, `../ui/${page.toString()}.html`))
+    },
+  }
+)
 
-  protocol?.scheme && app.setAsDefaultProtocolClient(protocol.scheme, protocol.path, protocol.args)
-
+export function createElectronApp() {
   const gotTheLock = app.requestSingleInstanceLock()
   if (!gotTheLock) app.quit()
-  else {
-    if (protocol) {
-      app.on('second-instance', (_event, argv) => {
-        const url = argv.find(arg => arg.startsWith(protocol.scheme))
-        if (!url) return
-        process.platform !== 'darwin' && protocol.handle(url)
-      })
-      app.on('open-url', (event, url) => {
-        event.preventDefault()
-        protocol.handle(url)
-      })
-    }
 
-    if (update) {
-      app.whenReady().then(() => {
-        import('electron-updater').then(({ autoUpdater }) => {
-          autoUpdater.autoDownload = update.auto_download
-          autoUpdater.on('update-available', async (...args: any[]) => {
-            const canDownloadUpdate = await update.onUpdateAvailable(args)
-            canDownloadUpdate && autoUpdater.downloadUpdate()
-          })
-          autoUpdater.on('update-downloaded', async (...args: any[]) => {
-            const canInstallUpdate = await update.onUpdateDownloaded(args)
-            canInstallUpdate && setImmediate(() => autoUpdater.quitAndInstall())
-          })
-          autoUpdater.on('error', update.onUpdateError)
-        })
-      })
-    }
-  }
+  //{{ initializeServices }}
 
   return {
     app,
