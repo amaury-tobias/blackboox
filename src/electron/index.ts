@@ -103,6 +103,15 @@ export function createElectronWindow({ url, contentProtection }: CreateWindowOpt
   return window
 }
 
-export function defineService<T extends Record<string, () => Promise<unknown>>>(service: T) {
-  return () => service
+type ServiceObject<T> = Record<string, () => Promise<T>>
+type ServiceFunction<T> = () => ServiceObject<T>
+type ServiceDeclaration<T> = ServiceObject<T> | ServiceFunction<T>
+type ExtractServiceObject<T> = T extends ServiceFunction<unknown> ? ReturnType<T> : T
+
+export function defineService<T extends ServiceDeclaration<unknown>, K extends ExtractServiceObject<T>>(
+  service: T
+): () => K {
+  if (typeof service === 'function') return service as () => K
+
+  return () => service as unknown as K
 }
