@@ -76,23 +76,25 @@ export function useApplicationUrl(page: string) {
   return __windowUrls[page]
 }
 
-type CreateWindowOptions = {
-  url: URL
-  contentProtection?: boolean
-}
+type BBWebPreferences = Omit<WebPreferences, 'preload' | 'contextIsolation'>
+type BBBrowserWindowConstructorOptions = {
+  webPreferences?: BBWebPreferences
+} & Omit<BrowserWindowConstructorOptions, 'show' | 'webPreferences'>
 
-export function createElectronWindow({ url, contentProtection }: CreateWindowOptions) {
+
+export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions) {
   const window = new BrowserWindow({
     height: 600,
     width: 800,
     show: false,
+    ...options,
     webPreferences: {
       devTools: !!import.meta.env.DEV,
       contextIsolation: true,
       preload: join(__dirname, '../preload.cjs'),
+      ...options?.webPreferences,
     },
   })
-  contentProtection && window.setContentProtection(contentProtection)
 
   window.once('ready-to-show', () => window.show())
   window.on('close', () => application_windows.delete(window.id))
