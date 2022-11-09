@@ -1,6 +1,6 @@
 {
   "name": "@attq/blackboox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -50,7 +50,7 @@
     "unimport": "^0.7.0",
     "unplugin": "^0.10.2",
     "unplugin-vue-components": "^0.22.9",
-    "vite": "^3.2.2"
+    "vite": "^3.2.3"
   },
   "peerDependencies": {
     "electron": "^21.2.2",
