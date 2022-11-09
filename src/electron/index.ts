@@ -47,7 +47,6 @@ type BBBrowserWindowConstructorOptions = {
   webPreferences?: BBWebPreferences
 } & Omit<BrowserWindowConstructorOptions, 'show' | 'webPreferences'>
 
-
 export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions) {
   const window = new BrowserWindow({
     height: 600,
@@ -71,7 +70,7 @@ export function createElectronWindow(url: URL, options?: BBBrowserWindowConstruc
   return window
 }
 
-type ServiceObject<T> = Record<string, () => Promise<T>>
+type ServiceObject<T> = Record<string, (...params: any) => Promise<T>>
 type ServiceFunction<T> = () => ServiceObject<T>
 type ServiceDeclaration<T> = ServiceObject<T> | ServiceFunction<T>
 type ExtractServiceObject<T> = T extends ServiceFunction<unknown> ? ReturnType<T> : T
