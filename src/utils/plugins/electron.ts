@@ -1,4 +1,5 @@
 import { EOL } from 'node:os'
+import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { promises as fsp } from 'node:fs'
 import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
@@ -83,7 +84,8 @@ export const startElectronPlugin = createUnplugin<Blackboox>((options = {}) => {
         electronProcess = null
       }
 
-      electronProcess = spawn('electron', [resolve(options.rootDir!, '.')])
+      const _require = createRequire(import.meta.url)
+      electronProcess = spawn(_require('electron'), [resolve(options.rootDir!, '.')])
       if (!electronProcess) return
 
       electronProcess.stdout.on('data', electronLogger)
