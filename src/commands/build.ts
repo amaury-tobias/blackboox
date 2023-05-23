@@ -41,7 +41,7 @@ export default defineBlackbooxCommand({
     if (args.pkg) {
       const require = createRequire(import.meta.url)
       const electronBuilder = require('electron-builder')
-      electronBuilder.build(blackboox.electron)
+      electronBuilder.build(blackboox.electron?.builder)
     }
   },
 })
