@@ -45,7 +45,7 @@ export function loadRendererConfig(blackboox: Blackboox) {
     },
     build: {
       emptyOutDir: true,
-      target: 'chrome106',
+      target: 'chrome112',
       outDir: resolve(blackboox.rootDir!, blackboox.buildDir!, 'source/ui'),
     },
     optimizeDeps: { exclude: ['electron'] },
@@ -85,7 +85,7 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
       sourcemap: mode === 'development' ? 'inline' : false,
       minify: mode === 'development' ? false : 'esbuild',
       emptyOutDir: true,
-      target: 'node16',
+      target: 'node18',
       outDir: resolve(blackboox.rootDir!, blackboox.buildDir!, 'source/app'),
       lib: {
         entry: 'index.ts',
