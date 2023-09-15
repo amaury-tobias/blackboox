@@ -78,7 +78,16 @@ type ExtractServiceObject<T> = T extends ServiceFunction<unknown> ? ReturnType<T
 export function defineService<T extends ServiceDeclaration<unknown>, K extends ExtractServiceObject<T>>(
   service: T
 ): () => K {
-  if (typeof service === 'function') return service as () => K
+  let instance: K | undefined
 
-  return () => service as unknown as K
+  return (function (): () => K {
+    if (!instance) {
+      if (typeof service === 'function') instance = service() as K
+      else instance = service as unknown as K
+
+      return () => instance as K
+    } else {
+      return () => instance as K
+    }
+  })()
 }
