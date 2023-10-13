@@ -85,6 +85,7 @@ export const startElectronPlugin = createUnplugin<Blackboox>((options = {}) => {
       }
 
       const _require = createRequire(import.meta.url)
+      // @ts-expect-error: _require inside spawn
       electronProcess = spawn(_require('electron'), [resolve(options.rootDir!, '.')])
       if (!electronProcess) return
 

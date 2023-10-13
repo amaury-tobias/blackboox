@@ -8,7 +8,7 @@ import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 
 import { electronMainPlugin, servicesElectronPlugin, startElectronPlugin } from './plugins/electron'
-import { autoImportClientPlugin, componentsPlugin, servicesClientPlugin } from './plugins/client'
+import { autoImportClientPlugin, componentsPlugin } from './plugins/client'
 
 import type { Blackboox } from '../types'
 
@@ -45,7 +45,7 @@ export function loadRendererConfig(blackboox: Blackboox) {
     },
     build: {
       emptyOutDir: true,
-      target: 'chrome112',
+      target: 'chrome118',
       outDir: resolve(blackboox.rootDir!, blackboox.buildDir!, 'source/ui'),
     },
     optimizeDeps: { exclude: ['electron'] },
@@ -53,7 +53,6 @@ export function loadRendererConfig(blackboox: Blackboox) {
       Vue(),
       componentsPlugin(blackboox),
       autoImportClientPlugin.vite(blackboox),
-      servicesClientPlugin.vite(blackboox),
       ...(blackboox.client?.plugins ?? []),
     ],
     server: {
@@ -79,8 +78,9 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
       watch:
         mode === 'development'
           ? {
-              exclude: '.blackboox/**',
-            }
+            exclude: '.blackboox/**',
+            buildDelay: 100,
+          }
           : null,
       sourcemap: mode === 'development' ? 'inline' : false,
       minify: mode === 'development' ? false : 'esbuild',

@@ -47,7 +47,7 @@ type BBBrowserWindowConstructorOptions = {
   webPreferences?: BBWebPreferences
 } & Omit<BrowserWindowConstructorOptions, 'show' | 'webPreferences'>
 
-export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions) {
+export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions): BrowserWindow {
   const window = new BrowserWindow({
     height: 600,
     width: 800,
