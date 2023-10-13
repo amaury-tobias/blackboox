@@ -38,7 +38,7 @@ export function createElectronApp() {
 
 const application_windows = new Map<number, BrowserWindow>()
 
-export function useApplicationUrl(page: string) {
+export function useApplicationUrl(page: string): URL {
   return __windowUrls[page]
 }
 
@@ -51,7 +51,6 @@ export function createElectronWindow(url: URL, options?: BBBrowserWindowConstruc
   const window = new BrowserWindow({
     height: 600,
     width: 800,
-    show: false,
     ...options,
     webPreferences: {
       devTools: !!import.meta.env.DEV,
@@ -61,12 +60,9 @@ export function createElectronWindow(url: URL, options?: BBBrowserWindowConstruc
     },
   })
 
-  window.once('ready-to-show', () => window.show())
   window.on('close', () => application_windows.delete(window.id))
   application_windows.set(window.id, window)
-
   window.loadURL(url.href)
-
   return window
 }
 

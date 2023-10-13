@@ -1,5 +1,3 @@
-import type { Argv } from 'mri'
-
 export interface BlackbooxCommandMeta {
   name: string
   usage: string
@@ -10,7 +8,7 @@ export interface BlackbooxCommandMeta {
 export type CLIInvokeResult = void | 'error' | 'wait'
 
 export interface BlackbooxCommand {
-  invoke(args: Argv): Promise<CLIInvokeResult> | CLIInvokeResult
+  invoke(args: string[]): Promise<CLIInvokeResult> | CLIInvokeResult
   meta: BlackbooxCommandMeta
 }
 

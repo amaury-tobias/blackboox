@@ -38,7 +38,7 @@ export default defineBlackbooxCommand({
       ...viteElectronConfig,
     })
 
-    if (args.pkg) {
+    if (args.includes('pkg')) {
       const require = createRequire(import.meta.url)
       const electronBuilder = require('electron-builder')
       electronBuilder.build(blackboox.electron?.builder)

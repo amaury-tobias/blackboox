@@ -154,7 +154,6 @@ export const writeTypes = async (blackboox: Blackboox) => {
   componentsPlugin(blackboox).configResolved({
     root: blackboox.srcDir!,
     plugins: [],
-    // @ts-expect-error
     build: {},
   })
 
