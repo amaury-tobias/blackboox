@@ -25,6 +25,7 @@ export async function generateTSConfig(blackboox: Blackboox) {
       allowSyntheticDefaultImports: true,
       isolatedModules: true,
       esModuleInterop: true,
+      preserveSymlinks: true,
       types: ['node'],
       paths: {},
     },
