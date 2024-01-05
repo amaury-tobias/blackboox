@@ -48,8 +48,6 @@ type BBBrowserWindowConstructorOptions = {
 } & Omit<BrowserWindowConstructorOptions, 'show' | 'webPreferences'>
 
 export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions): BrowserWindow {
-  const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
   const window = new BrowserWindow({
     height: 600,
     width: 800,
@@ -57,7 +55,7 @@ export function createElectronWindow(url: URL, options?: BBBrowserWindowConstruc
     webPreferences: {
       devTools: !!import.meta.env.DEV,
       contextIsolation: true,
-      preload: join(__dirname, '../preload.cjs'),
+      preload: new URL('../preload.cjs', import.meta.url).pathname,
       ...options?.webPreferences,
     },
   })
