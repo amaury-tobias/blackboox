@@ -123,7 +123,7 @@ export async function generatePackageJSON(blackboox: Blackboox) {
     version: original.version,
     license: original.license,
     description: original.description,
-    main: 'app/index.cjs',
+    main: 'app/index.mjs',
     type: 'module',
     dependencies: Object.entries(original.dependencies ?? {})
       .filter(([name]) => blackboox.electron?.external!.includes(name))
