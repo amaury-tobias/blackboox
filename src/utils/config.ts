@@ -34,7 +34,6 @@ export async function loadBlackbooxConfig() {
 export function loadRendererConfig(blackboox: Blackboox) {
   return defineConfig({
     base: '',
-    root: resolve(blackboox.rootDir!),
     clearScreen: false,
     resolve: {
       alias: {
@@ -67,7 +66,6 @@ export function loadRendererConfig(blackboox: Blackboox) {
 
 export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 'production'; blackboox: Blackboox }) {
   return defineConfig({
-    root: resolve(blackboox.rootDir!),
     clearScreen: false,
     resolve: {
       alias: {
@@ -96,6 +94,7 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
         formats: ['es'],
       },
       rollupOptions: {
+        output: { entryFileNames: '[name].mjs' },
         external: [...builtinModules, ...(blackboox.electron?.external ?? []), 'electron', 'electron-updater'],
       },
     },
