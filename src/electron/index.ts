@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { pathToFileURL } from 'url'
+import { pathToFileURL, fileURLToPath } from 'url'
 import { app, ipcMain, BrowserWindow, type BrowserWindowConstructorOptions, type WebPreferences } from 'electron'
 
 // function called on runtime
@@ -48,6 +48,8 @@ type BBBrowserWindowConstructorOptions = {
 } & Omit<BrowserWindowConstructorOptions, 'show' | 'webPreferences'>
 
 export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions): BrowserWindow {
+  const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
   const window = new BrowserWindow({
     height: 600,
     width: 800,
