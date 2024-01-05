@@ -34,6 +34,7 @@ export async function loadBlackbooxConfig() {
 export function loadRendererConfig(blackboox: Blackboox) {
   return defineConfig({
     base: '',
+    root: resolve(blackboox.rootDir!),
     clearScreen: false,
     resolve: {
       alias: {
@@ -45,10 +46,12 @@ export function loadRendererConfig(blackboox: Blackboox) {
     },
     build: {
       emptyOutDir: true,
-      target: 'chrome118',
+      target: 'chrome120',
       outDir: resolve(blackboox.rootDir!, blackboox.buildDir!, 'source/ui'),
     },
-    optimizeDeps: { exclude: ['electron'] },
+    optimizeDeps: {
+      exclude: ['electron', ...blackboox.client?.optimizeDeps?.exclude ?? []],
+    },
     plugins: [
       Vue(),
       componentsPlugin(blackboox),
@@ -64,6 +67,7 @@ export function loadRendererConfig(blackboox: Blackboox) {
 
 export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 'production'; blackboox: Blackboox }) {
   return defineConfig({
+    root: resolve(blackboox.rootDir!),
     clearScreen: false,
     resolve: {
       alias: {
@@ -89,18 +93,17 @@ export function loadElectronConfig({ mode, blackboox }: { mode: 'development' | 
       outDir: resolve(blackboox.rootDir!, blackboox.buildDir!, 'source/app'),
       lib: {
         entry: 'index.ts',
-        formats: ['cjs'],
+        formats: ['es'],
       },
       rollupOptions: {
-        output: { entryFileNames: '[name].cjs' },
-        external: [...builtinModules, ...(blackboox.external ?? []), 'electron', 'electron-updater'],
+        external: [...builtinModules, ...(blackboox.electron?.external ?? []), 'electron', 'electron-updater'],
       },
     },
     plugins: [
       electronMainPlugin.vite(blackboox),
       servicesElectronPlugin.vite(blackboox),
       ...(blackboox.electron?.plugins ?? []),
-      ...[mode === 'development' ? startElectronPlugin.vite(blackboox) : null],
+      [mode === 'development' ? startElectronPlugin.vite(blackboox) : null],
     ],
   })
 }

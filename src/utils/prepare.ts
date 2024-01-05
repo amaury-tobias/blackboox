@@ -124,8 +124,9 @@ export async function generatePackageJSON(blackboox: Blackboox) {
     license: original.license,
     description: original.description,
     main: 'app/index.cjs',
+    type: 'module',
     dependencies: Object.entries(original.dependencies ?? {})
-      .filter(([name]) => blackboox.external!.includes(name))
+      .filter(([name]) => blackboox.electron?.external!.includes(name))
       .reduce((object, entry) => ({ ...object, [entry[0]]: entry[1] }), {}),
   }
   const destination = resolve(blackboox.buildDir!, 'source', 'package.json')
