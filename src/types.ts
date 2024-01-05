@@ -7,16 +7,19 @@ export type Blackboox = {
   rootDir?: string
   buildDir?: string
 
-  external?: string[]
-
   electron?: {
     builder?: CliOptions
     plugins?: PluginOption[]
+    external?: string[]
   }
 
   client?: {
     autoImportPresets?: (Preset | Exclude<BuiltinPresetName, 'vue'>)[]
     plugins?: PluginOption[]
+    external?: string[]
+    optimizeDeps?: {
+      exclude?: []
+    }
   }
 }
 
