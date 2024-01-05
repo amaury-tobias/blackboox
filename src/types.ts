@@ -18,7 +18,7 @@ export type Blackboox = {
     plugins?: PluginOption[]
     external?: string[]
     optimizeDeps?: {
-      exclude?: []
+      exclude?: string[]
     }
   }
 }
