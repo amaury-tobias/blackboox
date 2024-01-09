@@ -13,13 +13,18 @@ function initializeServices(services: Record<any, any>) {
   return () => ipcMain.removeHandler('service:call')
 }
 
-global.__windowUrls = new Proxy(
+const urlProxy = new Proxy<Record<string, URL>>(
   {},
   {
     get(_, page) {
       return import.meta.env.DEV
-        ? new URL(`http://localhost:${4000}/${page.toString()}`)
-        : pathToFileURL(join(__dirname, `../ui/${page.toString()}.html`))
+        ? new URL(`http://localhost:4000/#/${page.toString()}`)
+        : new URL(
+          join(
+            new URL(import.meta.url).toString(),
+            `../../ui/index.html#/${page.toString()}`
+          )
+        )
     },
   }
 )
@@ -38,8 +43,8 @@ export function createElectronApp() {
 
 const application_windows = new Map<number, BrowserWindow>()
 
-export function useApplicationUrl(page: string): URL {
-  return __windowUrls[page]
+export function useApplicationUrl(page: string) {
+  return urlProxy[page]
 }
 
 type BBWebPreferences = Omit<WebPreferences, 'preload' | 'contextIsolation'>
