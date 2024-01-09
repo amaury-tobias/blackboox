@@ -1,6 +1,10 @@
-import { join } from 'path'
-import { pathToFileURL, fileURLToPath } from 'url'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { app, ipcMain, BrowserWindow, type BrowserWindowConstructorOptions, type WebPreferences } from 'electron'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 
 // function called on runtime
 function initializeServices(services: Record<any, any>) {
@@ -60,7 +64,7 @@ export function createElectronWindow(url: URL, options?: BBBrowserWindowConstruc
     webPreferences: {
       devTools: !!import.meta.env.DEV,
       contextIsolation: true,
-      preload: new URL('../preload.cjs', import.meta.url).pathname,
+      preload: join(__dirname, '../preload.cjs'),
       ...options?.webPreferences,
     },
   })
