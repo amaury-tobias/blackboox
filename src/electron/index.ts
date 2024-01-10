@@ -1,10 +1,9 @@
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 import { app, ipcMain, BrowserWindow, type BrowserWindowConstructorOptions, type WebPreferences } from 'electron'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-
 
 // function called on runtime
 function initializeServices(services: Record<any, any>) {
@@ -23,16 +22,13 @@ const urlProxy = new Proxy<Record<string, URL>>(
     get(_, page) {
       return import.meta.env.DEV
         ? new URL(`http://localhost:4000/#/${page.toString()}`)
-        : new URL(
-          join(
-            new URL(import.meta.url).toString(),
-            `../../ui/index.html#/${page.toString()}`
-          )
-        )
+        : new URL(join(new URL(import.meta.url).toString(), `../../ui/index.html#/${page.toString()}`))
     },
   }
 )
-
+export function useApplicationUrl(page: string) {
+  return urlProxy[page]
+}
 export function createElectronApp() {
   const gotTheLock = app.requestSingleInstanceLock()
   if (!gotTheLock) app.quit()
@@ -45,17 +41,11 @@ export function createElectronApp() {
   }
 }
 
-const application_windows = new Map<number, BrowserWindow>()
-
-export function useApplicationUrl(page: string) {
-  return urlProxy[page]
-}
-
 type BBWebPreferences = Omit<WebPreferences, 'preload' | 'contextIsolation'>
 type BBBrowserWindowConstructorOptions = {
   webPreferences?: BBWebPreferences
 } & Omit<BrowserWindowConstructorOptions, 'show' | 'webPreferences'>
-
+const application_windows = new Map<number, BrowserWindow>()
 export function createElectronWindow(url: URL, options?: BBBrowserWindowConstructorOptions): BrowserWindow {
   const window = new BrowserWindow({
     height: 600,
